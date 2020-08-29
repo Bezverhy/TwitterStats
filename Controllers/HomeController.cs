@@ -18,10 +18,10 @@ namespace Twitter_stats.Controllers
         {
             CredentialStore = new SingleUserInMemoryCredentialStore
             {
-                ConsumerKey = "KfTrCw2GFEFSbqyNe810IUFoP",
-                ConsumerSecret = "sB74ZGj7T6Hy42LiiBPOo8YHT8gW01LPv2s8JPGeRomtKzr7O2",
-                AccessToken = "1255976389603397638-emjulzzVHTdmcBU3sLV9JZGnTxjLVo",
-                AccessTokenSecret = "Zgqnv5ufgTcVkIeetRTW187HeiYvj3F0iztngQrhVsXqY"
+                ConsumerKey = [ConsumerKey],
+                ConsumerSecret = [ConsumerSecret],
+                AccessToken = [AcessToken],
+                AccessTokenSecret = [AcessTokenSecret]
             }
         };
 
