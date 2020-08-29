@@ -1,0 +1,356 @@
+﻿@{
+    ViewData["Title"] = ViewData["Name"].ToString() + "/@" + ViewData["Username"].ToString();
+    var Topics = ViewData["PopularTopics"] as Dictionary<string, int>;
+    var UserPictures = ViewData["UserPictures"] as List<UserContextInfo>;
+    var Hashtags = ViewData["Hashtags"] as Dictionary<string, int>;
+    var timespanData = ViewData["TweetTimespan"] as string;
+    var UserLink = "https://twitter.com/" + @ViewData["Username"];
+    var Domains = @ViewData["Domains"] as string[];
+    var Verified = ViewData["Verified"].ToString();
+}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<head>
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+
+    <div class="about-background" style="background: #eabd6c;padding-top:20px;padding-bottom:20px;margin-top:10px;">
+        <div class="container about-container">
+            <a href="@UserLink" target="_blank" style="text-decoration:none;display: inline-block;">
+                <img src=@ViewData["Image"] alt="User picture" style="width: 84px;height: 84px;
+                   padding: 3px;border: solid 1px black;box-shadow:0 2px 2px;background: white;border-radius: 2px;">
+            </a>
+
+            <h3 style="display: inline-block; position: absolute; margin-left: 3.5%;height:40px; margin-bottom: 17px;
+             border-bottom: 1px solid #0908082e; margin-top: 0.5%;width: 50%;font-weight:bold;font-size:26px;">
+                @ViewData["Name"]
+                @if (Verified == "Verified")
+                {
+                    <span class="label label-success" style="font-size:18px">@Verified</span>
+                }
+                else if (Verified == "Not verified")
+                {
+                    <span class="label label-default" style="font-size:18px">@Verified</span>
+                }
+                else if (Verified == "Protected")
+                {
+                    <span class="label label-primary" style="font-size:18px">@Verified</span>
+                }
+
+                <small style="font-weight:normal">@ViewData["SmallName"]</small>
+            </h3>
+            <p style="display:inline-block;display: inline-block; padding-top: 55px; position: absolute; padding-left: 3.5%;">@ViewData["Bio"]</p>
+        </div>
+    </div>
+
+    <section id="overview">
+        <div class="container about-container">
+            <p><a name="overwiew"></a></p>
+            <h1 style="display: block;position:relative;margin-top:7%; margin-bottom: 17px;
+             border-bottom: 1px solid #0908082e;height:50px">
+                Особисті дані
+            </h1>
+
+            <div style="display: inline-block">
+                <h2 style="display:block;position:relative;">Інформація</h2>
+                <p style="width:25%;display:inline-block;position:relative;top:-45px">
+                    Найважливіша інформація при перегляді акаунту це <strong>дата створення</strong>.
+                    Чим довше користувач знаходиться в мережі Twitter, тим менше ймовірність того, що це бот.
+                    Спам-акаунти та боти зазвичай видаляються через пару тижнів.
+                </p>
+                <table style="display:inline-block;padding-left:10%;width:70%;
+                  font-family:Georgia,serif;line-height: 2;">
+                    <tbody>
+                        <tr style="border-bottom: 1px solid #0908082e;">
+                            <td width="55%" ;>Ім'я</td>
+                            <td>@ViewData["Name"] </td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #0908082e">
+                            <td width="55%">Дата створення</td>
+                            <td>@ViewData["JoinedOn"]</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #0908082e">
+                            <td>Місцезнаходження</td>
+                            <td>@ViewData["Location"]</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #0908082e">
+                            <td>Часовий пояс(UTC)</td>
+                            <td>@ViewData["Timezone"]</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #0908082e">
+                            <td>Мова </td>
+                            <td>
+                                @ViewData["Language"] <span class="help-block" style="display:inline"> мова спілкування</span>
+                            </td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #0908082e">
+                            <td>Описання</td>
+                            <td>@ViewData["Bio"]</td>
+                        </tr>
+                        <tr>
+                            <td>URL</td>
+                            <td><a href=@ViewData["Url"] target="_blank">@ViewData["Url"]</a></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section id="statistics">
+        <div class="container about-container">
+
+            <p><a name="stats"></a></p>
+            <h1 style="display: block;position:relative;margin-top:7%; margin-bottom: 17px;
+             border-bottom: 1px solid #0908082e;height:50px">
+                Статистичні дані
+            </h1>
+
+            <div style="display:flex">
+                <h2 style="display:block;position:relative;">Статистика</h2>
+                <p style="width:15%;position:absolute;display:flex;margin-top:5%">
+                    Багато підписників це добре, однак не забувайте про співвідношення підписників(followers) до акаунтів, на які користувач підписаний(following).
+                    Високе співвідношення означає, що більше людей спостерігає за діями @ViewData["SmallName"], аніж він за ними.
+                </p>
+                <table style="position:relative;margin-left:24%;margin-top:6.5%;width:60%;min-width:60%;max-width:60%;
+                  font-family:Georgia,serif;line-height: 2;">
+                    <tbody>
+                        <tr style="border-bottom: 1px solid #0908082e;">
+                            <td width="50%" ;>Твіти</td>
+                            <td>@ViewData["TweetCount"] </td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #0908082e">
+                            <td>Кількість підписників</td>
+                            <td>@ViewData["Followers"]</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #0908082e">
+                            <td>Слідкує за</td>
+                            <td>
+                            @ViewData["Following"]<span class="help-block" style="display:inline"> кількість користувачів</span>
+                            </td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #0908082e">
+                            <td>Співвідношення Followers/Following</td>
+                            <td>@ViewData["FollowingRatio"]</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #0908082e">
+                            <td>User ID</td>
+                            <td>@ViewData["UserId"]</td>
+                        </tr>
+                        <tr>
+                            <td>Останнє повідомлення:</td>
+                            <td>@(new Microsoft.AspNetCore.Html.HtmlString(ViewData["LastStatus"].ToString()))</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="topics" style="margin-top:2%">
+        <div class="container about-container" style="width:auto">
+            <p><a name="tops"></a></p>
+
+            <h1 style="display: block;position:relative;margin-top:7%; margin-bottom: 17px;
+             border-bottom: 1px solid #0908082e;height:50px">
+                Інформація, зібрана з останніх 100 твітів
+            </h1>
+
+            <div style="display:flex">
+                <h2 style="display:block;position:relative;">100 Твітів</h2>
+                <p style="width:15%;position:absolute;display:flex;margin-top:5%">
+                    Ми переглянули вміст 100 останніх твітів користувача  @ViewData["SmallName"]
+                    і ось цікава інформація, яку ми можемо Вам представити.
+                </p>
+                <table style="margin-left:17%;margin-top:6.5%;width:60%;min-width:60%;max-width:60%;
+                  font-family:Georgia,serif;line-height: 2;">
+                    <tbody>
+                        <tr style="border-bottom: 1px solid #0908082e;">
+                            <td width="50%" ;>Відповіді</td>
+                            <td>@ViewData["Retweets"] / 100 </td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #0908082e">
+                            <td>Твіти зі @@згадками</td>
+                            <td>@ViewData["Replies"] / 100</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #0908082e">
+                            <td>Твіти з #хештегами</td>
+                            <td>@ViewData["MediaCount"] / 100</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #0908082e">
+                            <td>Ретвіти</td>
+                            <td>@ViewData["UrlCount"] / 100</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #0908082e">
+                            <td>Твіти з посиланнями</td>
+                            <td>
+                                @ViewData["HashTagCount"] / 100<span class="help-block"></span>
+                            </td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #0908082e">
+                            <td>Твіти з медіа-файлами</td>
+                            <td>@ViewData["UserMentionsCount"] / 100</td>
+                        </tr>
+                        <tr>
+                            <td>Часто згадані веб-ресурси</td>
+                            <td>
+                                @foreach (var domain in Domains)
+                                {
+                                    var url = "https://" + @domain;
+                                <span>
+                                    
+                                    <a href="@url">@domain</a>
+                                |</span>
+                                }
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+        <div style="display: inline-block">
+            <h2 style="display:block;margin-bottom: 2%;">Теми</h2>
+            <span style="width:20%;display:inline-block">
+                Секція популярних тем показує ступінь використання певних слів та словосполучень користувачем у своїх повідомленнях.
+                Набільш вживані теми представлені у вигляді хмари тегів(tag cloud).
+                Чим більше користувач згадує тему, тим більше її розмір на екрані.
+            </span>
+            <span style="display:inline-block; float:right;
+                 line-height: 1;width:70%;margin-left:5%">
+                @foreach (var topics in Topics)
+                {
+                    var fontSizeValue = Convert.ToString(topics.Value + 10) + "px";
+                    if (topics.Value > 2)
+                    {
+                        var topicUrl = "https://twitter.com/search?q=" + topics.Key;
+                        <span>
+                            <a style="font-size:@fontSizeValue;font-weight: bold" href="@topicUrl" target="_blank">@topics.Key</a>
+                        </span>
+                    }
+                }
+            </span>
+
+        </div>
+        </div>
+
+        <div class="container about-container" style="width:auto">
+
+            <h2 style="display:block;margin-top:40px;">@@Згадки</h2>
+            <span style="width:20%;display:inline-block;margin-bottom:2%;">
+                В даній секції вказані профілі користувачів,з якими @ViewData["SmallData"] взаємодіяв в останніх повідомленнях.
+            </span>
+
+            <span style="display:inline-block;
+                 line-height: 1;width:70%;margin-left:5%;float:right;">
+                @foreach (var users in UserPictures)
+                {
+                    var userLink = "http://twitterstats.somee.com/Home/About?AccountName=" + users.MentionedUser;
+                    var tooltipTitle = "@" + users.MentionedUser + " / " + "згадано разів: " + users.MentionsNumber.ToString();
+                    <span>
+                        <a href="@userLink" target="_blank" style="text-decoration: none;">
+                            <img src=@users.UserImgLink.Replace("normal","bigger") alt="User picture"
+                                 style=" width: 48px; height: 48px; padding: 1px; border: solid 1px #ddd;
+                                     background: black; border-radius: 2px;" data-toggle="tooltip"
+                                 data-placement="top" title="@tooltipTitle">
+                        </a>
+                    </span>
+                }
+            </span>
+        </div>
+
+        <div class="container about-container" style="width:100%">
+
+            <h2 style="display:block;margin-top:40px;margin-bottom:2%;">#Хештеги</h2>
+            <span style="width:20%;display:inline-block;">
+                Хештеги не є обов'язковим атрибутом твітів, однак вони дозволяють значно збільшити обсяг аудиторії.
+                Переглядайте теги, які використовує @ViewData["SmallName"] в останніх повідомленнях.
+            </span>
+            <span style="display:inline-block;margin-left:5%;width:70%;float:right;
+                 line-height: 1;">
+                @foreach (var tag in Hashtags)
+                {
+
+                    var tagUrl = "https://twitter.com/search?q=" + "#" + tag.Key;
+                    <span>
+                        <a href="@tagUrl" target="_blank">#@tag.Key</a>
+                    </span>
+
+                }
+            </span>
+
+        </div>
+
+    </section>
+
+        <section id="charts">
+            <div class="container about-container">
+                <p><a name="chart"></a></p>
+
+                <h1 style="display: block;position:relative;margin-top:7%; margin-bottom: 17px;
+             border-bottom: 1px solid #0908082e;height:50px">
+                    Графіки<span class="help-block" style="display:inline"><small> Інфографіки вмісту 100 останніх твітів</small></span>
+                </h1>
+
+                <div style="display:flex">
+                    <h2 style="display:block;position:relative;">Графік часу відправки повідомленнь</h2>
+                    <p style="width:60%;position:absolute;display:flex;margin-top:5%">
+                        Дана гістограма вказує активність користувача, яка базується на часі відправки останніх повідомлень.
+                        Наведіть на стовпці, щоб побачити кількість повідомлень, відправлених в певний проміжок часу. 
+                        Не забувайте про часі пояси!
+                    </p>
+                </div>
+                <div class="chart-container" style="position:relative;margin-top:5%;width:100%;">
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+</body>
+
+
+<script>
+
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+
+    twemoji.size = '36x36';
+    twemoji.parse(document.body);
+
+    var ctx = document.getElementById('myChart').getContext('2d');
+        var chart = new Chart(ctx, {
+           // The type of chart we want to create
+           type: 'bar',
+        // The data for our dataset
+        data: {
+        labels: ['00', '01', '02', '03', '04', '05', '07', '08', '09', '10', '11', '12',
+            '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24'],
+            datasets: [{
+            label: 'Повідомлення',
+                backgroundColor: "#4b4bdd",
+                borderColor: "#000",
+                borderWidth: '2',
+                data: [@timespanData]
+            }]
+        },
+
+        // Configuration options 
+        options: {
+        responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+            xAxes: [{
+                barThickness: 20,  // number (pixels) or 'flex'
+                    maxBarThickness: 20// number (pixels)
+                }]
+            }
+        }
+    });
+</script>

@@ -1,0 +1,72 @@
+﻿<style>
+    .loader {
+        border: 5px solid rgba(0,0,0,0);
+        border-radius: 50%;
+        border-top: 3px solid burlywood;
+        border-left: 3px solid burlywood;
+        border-bottom: 3px solid burlywood;
+        width: 20px;
+        height: 20px;
+        -webkit-animation: spin 1s linear infinite;
+        animation: spin 1s linear infinite;
+    }
+
+@@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+</style>
+
+
+
+<h3 align="center" style="font-size:25px;background-color:#efefef;font-family:Impact, fantasy;
+margin-top: 50px;margin-bottom:50px;padding-top: 50px;">
+    Twitter stats - інструмент аналізу публічних профілів соціальної мережі Twitter
+</h3>
+
+<div class="gray-background" style="background: #efefef;width:100%;">
+
+    <div style="display: inline-block;width:55%;padding-left:15%;padding-right:5%;font-size:14px">
+        <h3 style="font-size:20px;font-weight: bold">Як працює Twitter stats</h3>
+        <p>Сервіс Twitter stats збирає інформацію профілю обраного вами користувача та його останні твіти. Аналізується вміст твітів та формується інформація про використання тем у формі "хмари тегів", щоб ви могли легко зрозуміти, які слова були найпопулярнішими.</p>
+        <p>
+            Також відображається інформація, яку Ви не побачите на загальнодоступних сторінках Twitter, наприклад <strong>дата створення акаунту</strong>,
+            <strong>загальна кількість твітів</strong>,<strong>кількість підписників</strong> та ін. Отже, використавши Twitter Stats Вам буде зручно й легко віднайти корисну інформацію про вміст акаунтів Twitter!
+        </p>
+    </div>
+
+    <div style="display: inline-block;width:40%;padding-left:2%;position:relative;top:-50px">
+        <p style="font-size:20px;font-weight: bold;"> Щоб розпочати, введіть назву акаунта Twitter!</p>
+
+        <form name="inputForm" action="Home/About" method="GET">
+            <div class="input-group">
+                <span class="input-group-addon" style="width:10px;">@@</span>
+                <input type="text" name="AccountName" class="form-control" id="InputAccountName" placeholder="Назва акаунта"
+                       aria-describedby="InputHelp" style="width:200px;" required >
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary" id="btn-one" >Розпочати</button>
+            <p style="margin-top: 4px;">
+                <span class="help-block" style="display:inline-block">
+                    <strong>Майте на увазі:</strong> процес збору інформації може займати декілька хвилин, тому будьте терплячими!
+                </span>
+            </p>
+        </form>
+    </div>
+</div>
+@*<div class="gray-background" style="background: #808080; padding-top: 20px; padding-bottom: 30px;width:100%;height:400px">*@
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+
+    $('#btn-one').click(function () {
+        if ($('#InputAccountName').val() != '') {
+            $('#btn-one').html('<div class="loader" style="display:inline-block" role="status" aria-hidden="true"></div> Завантаження...').addClass('disabled');
+        }
+    });
+    
+</script>
