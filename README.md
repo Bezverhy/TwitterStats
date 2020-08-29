@@ -1,2 +1,3 @@
 # TwitterStats
-TwitterStats - analize twitter accounts
+TwitterStats - analize twitter accounts.
+Please, head to Screenshots folder.
